@@ -1,0 +1,56 @@
+<template>
+  <!-- Card referencing Object Labels -->
+  <div class="inner-card">
+    <lightning-card
+      title={saleInfo.saleId}
+      icon-name="standard:partner_fund_request"
+    >
+      <div class="slds-p-horizontal_large">
+        <h1 class="slds-text-heading_small"><b>{saleInfo.sneakerName}</b></h1>
+        <br />
+        <ul>
+          <li>
+            {fieldDescribes.data.salePrice.label}:
+            <b> ${saleInfo.salePrice}</b>
+          </li>
+          <li>
+            {fieldDescribes.data.profit.label}:
+            <b> ${saleInfo.profit}</b>
+          </li>
+          <li>
+            {fieldDescribes.data.numDaysListed.label}:
+            <b> {saleInfo.numDaysListed}</b>
+          </li>
+          <li>
+            {fieldDescribes.data.releaseDate.label}:
+            <b> {saleInfo.releaseDate}</b>
+          </li>
+          <li>
+            {fieldDescribes.data.buyerRegion.label}:
+            <b> {saleInfo.buyerRegion}</b>
+          </li>
+        </ul>
+      </div>
+    </lightning-card>
+  </div>
+
+  <!-- Backup card in case that breaks everything -->
+  <!-- <div class="inner-card">
+    <lightning-card
+      title={saleInfo.saleId}
+      icon-name="standard:partner_fund_request"
+    >
+      <div class="slds-p-horizontal_large">
+        <h1 class="slds-text-heading_small"><b>{saleInfo.sneakerName}</b></h1>
+        <br />
+        <ul>
+          <li>Sale Price:<b> ${saleInfo.salePrice}</b></li>
+          <li>Profit:<b> ${saleInfo.profit}</b></li>
+          <li>Number of Days Listed:<b> {saleInfo.numDaysListed}</b></li>
+          <li>Release Date:<b> {saleInfo.releaseDate}</b></li>
+          <li>Buyer Region:<b> {saleInfo.buyerRegion}</b></li>
+        </ul>
+      </div>
+    </lightning-card>
+  </div> -->
+</template>
