@@ -1,0 +1,46 @@
+<template>
+  <lightning-card title="2048" icon-name="custom:custom66">
+
+    <!-- Control Buttons -->
+    <lightning-button-group slot="actions">
+      <lightning-button label="Left" onclick={handleLeftAction}></lightning-button>
+      <lightning-button label="Right" onclick={handleRightAction}></lightning-button>
+      <lightning-button label="Up" onclick={handleUpAction}></lightning-button>
+      <lightning-button label="Down" onclick={handleDownAction}></lightning-button>
+    </lightning-button-group>
+
+    <div style="display: flex; justify-content:space-around; align-items:center;">
+      <!-- Game Board -->
+      <table class="table">
+        <tr>
+          <td class="cell">{cell0Value}</td>
+          <td class="cell">{cell1Value}</td>
+          <td class="cell">{cell2Value}</td>
+          <td class="cell">{cell3Value}</td>
+        </tr>
+        <tr>
+          <td class="cell">{cell4Value}</td>
+          <td class="cell">{cell5Value}</td>
+          <td class="cell">{cell6Value}</td>
+          <td class="cell">{cell7Value}</td>
+        </tr>
+        <tr>
+          <td class="cell">{cell8Value}</td>
+          <td class="cell">{cell9Value}</td>
+          <td class="cell">{cell10Value}</td>
+          <td class="cell">{cell11Value}</td>
+        </tr>
+        <tr>
+          <td class="cell">{cell12Value}</td>
+          <td class="cell">{cell13Value}</td>
+          <td class="cell">{cell14Value}</td>
+          <td class="cell">{cell15Value}</td>
+        </tr>
+      </table>
+
+      <lightning-input onkeydown={captureKeyPress} label="Direction" value={blankInputValue}></lightning-input>
+    </div>
+
+
+  </lightning-card>
+</template>
