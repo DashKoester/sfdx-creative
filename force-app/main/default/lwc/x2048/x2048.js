@@ -15,9 +15,8 @@ export default class X2048 extends LightningElement {
   EMPTY_CELL_COLOR = '#cdc1b4';
   GRID_WAS_UPDATED = false;
   populatedCells = new Set();
-
-  // for arrow keys
-  blankInputValue = null;
+  //TODO: keep set of combined cells to avoid cascade combining across a row/column
+  combinedCells = new Set();
 
   connectedCallback() {
     this.initBoard();
@@ -28,9 +27,8 @@ export default class X2048 extends LightningElement {
     this.generateNewCell(2);
   }
 
-  // TODO: update references for account for null colors
   updateCell(row, col, value, color) {
-    color = color ? color : this.EMPTY_CELL_COLOR;
+    color = color || this.EMPTY_CELL_COLOR;
     this.grid[row][col] = new Cell(value, color);
 
     const xyCoord = row + ',' + col;
@@ -138,7 +136,7 @@ export default class X2048 extends LightningElement {
         if (currentCell.value) {
           let adjacentCell = this.getCell(currentRow - 1, j);
 
-          // move cell all the way to the left
+          // move cell all the way up
           while (currentRow !== 0 && !adjacentCell.value) {
             this.updateCell(currentRow - 1, j, currentCell.value, currentCell.color);
             this.updateCell(currentRow, j, null, this.EMPTY_CELL_COLOR);
@@ -178,7 +176,7 @@ export default class X2048 extends LightningElement {
         if (currentCell.value) {
           let adjacentCell = this.getCell(currentRow + 1, j);
 
-          // move cell all the way to the left
+          // move cell all the way down
           while (currentRow !== 3 && !adjacentCell.value) {
             this.updateCell(currentRow + 1, j, currentCell.value, currentCell.color);
             this.updateCell(currentRow, j, null, this.EMPTY_CELL_COLOR);
@@ -223,19 +221,42 @@ export default class X2048 extends LightningElement {
   calculateColor(value) {
     switch (value) {
       case 2:
-        return 'RED';
+        return 'cell background2';
       case 4:
-        return 'GREEN';
+        return 'cell background4';
       case 8:
-        return 'BLUE';
+        return 'cell background8';
+      case 16:
+        return 'cell background16';
+      case 32:
+        return 'cell background32';
+      case 64:
+        return 'cell background64';
+      case 128:
+        return 'cell background128';
+      case 256:
+        return 'cell background256';
+      case 512:
+        return 'cell background512';
+      case 1024:
+        return 'cell background1024';
+      case 2048:
+        return 'cell background2048';
+      case 4096:
+        return 'cell background4096';
+      case 8192:
+        return 'cell background8192';
+      case 16384:
+        return 'cell background16384';
 
       default:
         return 'DEFAULT COLOR';
     }
   }
 
+  // TODO: Adjust this return not undefined when outside the grid boundaries
   getCell(row, col) {
-    if ((row >= 0 || row < this.WIDTH) && (col >= 0 && col < this.HEIGHT)) {
+    if ((row >= 0 && row < this.WIDTH) && (col >= 0 && col < this.HEIGHT)) {
       return this.grid[row][col];
     }
   }
@@ -260,7 +281,25 @@ export default class X2048 extends LightningElement {
     }
   }
 
-  // getters
+  // color getters
+  get cell0Color() { return this.grid[0][0].color }
+  get cell1Color() { return this.grid[0][1].color }
+  get cell2Color() { return this.grid[0][2].color }
+  get cell3Color() { return this.grid[0][3].color }
+  get cell4Color() { return this.grid[1][0].color }
+  get cell5Color() { return this.grid[1][1].color }
+  get cell6Color() { return this.grid[1][2].color }
+  get cell7Color() { return this.grid[1][3].color }
+  get cell8Color() { return this.grid[2][0].color }
+  get cell9Color() { return this.grid[2][1].color }
+  get cell10Color() { return this.grid[2][2].color }
+  get cell11Color() { return this.grid[2][3].color }
+  get cell12Color() { return this.grid[3][0].color }
+  get cell13Color() { return this.grid[3][1].color }
+  get cell14Color() { return this.grid[3][2].color }
+  get cell15Color() { return this.grid[3][3].color }
+
+  // value getters
   get cell0Value() { return this.grid[0][0].value }
   get cell1Value() { return this.grid[0][1].value }
   get cell2Value() { return this.grid[0][2].value }
