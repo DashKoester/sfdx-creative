@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Silhouette__c</fullName>
+    <description>The silhouette of the specific colorway.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The silhouette of the specific colorway.</inlineHelpText>
+    <label>Silhouette</label>
+    <referenceTo>Silhouette__c</referenceTo>
+    <relationshipLabel>Colorways</relationshipLabel>
+    <relationshipName>Colorways</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

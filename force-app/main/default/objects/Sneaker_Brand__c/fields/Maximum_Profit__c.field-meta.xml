@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Maximum_Profit__c</fullName>
+    <description>The largest profit a seller made for a shoe of this brand.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The largest profit a seller made for a shoe of this brand.</inlineHelpText>
+    <label>Maximum Profit</label>
+    <summarizedField>StockX_Sale__c.Profit__c</summarizedField>
+    <summaryForeignKey>StockX_Sale__c.Sneaker_Brand__c</summaryForeignKey>
+    <summaryOperation>max</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

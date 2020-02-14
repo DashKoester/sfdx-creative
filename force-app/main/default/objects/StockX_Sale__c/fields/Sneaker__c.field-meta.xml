@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sneaker__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The type of sneaker sold.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The type of sneaker sold.</inlineHelpText>
+    <label>Sneaker</label>
+    <referenceTo>Sneaker__c</referenceTo>
+    <relationshipLabel>StockX Sales</relationshipLabel>
+    <relationshipName>StockX_Sales</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

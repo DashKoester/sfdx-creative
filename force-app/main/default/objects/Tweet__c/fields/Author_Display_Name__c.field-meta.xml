@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Author_Display_Name__c</fullName>
+    <description>The author&#39;s Display Name</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The author&#39;s Display Name</inlineHelpText>
+    <label>Author Display Name</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

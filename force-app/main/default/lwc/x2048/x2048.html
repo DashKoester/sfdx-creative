@@ -2,21 +2,12 @@
   <lightning-card title="2048" icon-name="custom:custom66">
 
     <!-- Control Buttons -->
-    <div slot="actions">
-      <lightning-button-group>
-        <lightning-button-icon icon-name="utility:chevronleft" alternative-text="Left" onclick={handleLeftAction}>
-        </lightning-button-icon>
-        <lightning-button-icon icon-name="utility:chevronright" alternative-text="Right" onclick={handleRightAction}>
-        </lightning-button-icon>
-      </lightning-button-group>
-
-      <lightning-button-group>
-        <lightning-button-icon icon-name="utility:chevronup" alternative-text="Up" onclick={handleUpAction}>
-        </lightning-button-icon>
-        <lightning-button-icon icon-name="utility:chevrondown" alternative-text="Down" onclick={handleDownAction}>
-        </lightning-button-icon>
-      </lightning-button-group>
-    </div>
+    <lightning-button-group slot="actions">
+      <lightning-button label="Left" onclick={handleLeftAction}></lightning-button>
+      <lightning-button label="Right" onclick={handleRightAction}></lightning-button>
+      <lightning-button label="Up" onclick={handleUpAction}></lightning-button>
+      <lightning-button label="Down" onclick={handleDownAction}></lightning-button>
+    </lightning-button-group>
 
     <div style="display: flex; justify-content:space-around; align-items:center;">
       <!-- Game Board -->
