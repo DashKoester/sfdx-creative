@@ -34,6 +34,8 @@ export default class StockXSalesCardList extends LightningElement {
   // init method (Aura) / componentDidMount (React)
   connectedCallback = () => {
     // this.componentIsLoaded = true;
+    // eslint-disable-next-line no-console
+    console.log('ADDING T HIS SHOULD WORK');
   };
 
   handleDisplayModeChange = () => {

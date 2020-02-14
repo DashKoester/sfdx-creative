@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { LightningElement } from 'lwc';
 import YEEZY_LOGO_URL from '@salesforce/resourceUrl/Yeezy_Logo';
 
@@ -29,6 +30,48 @@ export default class BasicAnimation extends LightningElement {
 
         this.animateRectangle();
     }
+
+    captureKeyPress2() {
+        console.log('yeah');
+    }
+
+    captureKeyPress(e) {
+        switch(e.keyCode) {
+            case 37:
+                // left key pressed
+                this.leftKeyHandler();
+                break;
+            case 38:
+                // up key pressed
+                this.upKeyHandler();
+                break;
+            case 39:
+                // right key pressed
+                this.rightKeyHandler();
+                break;
+            case 40:
+                // down key pressed
+                this.downKeyHandler();
+                break;  
+            default:
+                break;
+        } 
+    } 
+
+    leftKeyHandler() {
+        console.log('left');
+    }
+
+    upKeyHandler() {
+        console.log('up');
+    }
+    rightKeyHandler() {
+        console.log('right');
+    }
+
+    downKeyHandler() {
+        console.log('down');
+    }    
 
     drawImage() {
         this.ctx.drawImage(this.yeezyLogoImage, this.x, this.y, 100, 100);

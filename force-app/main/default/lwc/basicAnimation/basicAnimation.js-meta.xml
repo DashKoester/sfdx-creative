@@ -12,5 +12,4 @@
             <property name="title" label="Title" type="String" description="The custom title for the card list." default="StockX Sales" />
             <property name="iconName" label="Icon Name" type="String" description="The name of an SLDS Lightning icon in the form category:icon, such as 'standard:record'." />
         </targetConfig>
-    </targetConfigs> -->
-</LightningComponentBundle>
+    </targetConfigs> --></LightningComponentBundle>

@@ -6,6 +6,6 @@
     }
   ],
   "namespace": "",
-  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sfdcLoginUrl": "https://dashcreative-dev-ed.lightning.force.com",
   "sourceApiVersion": "45.0"
 }

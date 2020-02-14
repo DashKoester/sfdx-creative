@@ -14,9 +14,13 @@ export default class X2048 extends LightningElement {
   HEIGHT = 4;
   EMPTY_CELL_COLOR = '#cdc1b4';
   GRID_WAS_UPDATED = false;
-  populatedCells = new Set();
   //TODO: keep set of combined cells to avoid cascade combining across a row/column
   combinedCells = new Set();
+
+  constructor() {
+    super();
+    this.template.addEventListener('onkeydown', this.captureKeyPress.bind(this));
+  }
 
   connectedCallback() {
     this.initBoard();
@@ -30,13 +34,6 @@ export default class X2048 extends LightningElement {
   updateCell(row, col, value, color) {
     color = color || this.EMPTY_CELL_COLOR;
     this.grid[row][col] = new Cell(value, color);
-
-    const xyCoord = row + ',' + col;
-    if (value) {
-      this.populatedCells.add(xyCoord);
-    } else {
-      this.populatedCells.delete(xyCoord);
-    }
 
     this.GRID_WAS_UPDATED = true;
   }
@@ -71,6 +68,11 @@ export default class X2048 extends LightningElement {
             const newValue = adjacentCell.value + currentCell.value;
             this.updateCell(i, currentCol - 1, newValue, this.calculateColor(newValue));
             this.clearCell(i, currentCol);
+
+            // update combined cells set
+            const combinedCellX = i;
+            const combinedCellY = currentCol - 1;
+            this.combinedCells.add(combinedCellX + combinedCellY);
           }
         }
       }
@@ -78,6 +80,7 @@ export default class X2048 extends LightningElement {
 
     if (this.GRID_WAS_UPDATED) {
       this.generateNewCell(2);
+      this.combinedCells.clear();
     }
   }
 
@@ -111,6 +114,11 @@ export default class X2048 extends LightningElement {
             const newValue = adjacentCell.value + currentCell.value;
             this.updateCell(i, currentCol + 1, newValue, this.calculateColor(newValue));
             this.clearCell(i, currentCol);
+            
+            // update combined cells set
+            const combinedCellX = i;
+            const combinedCellY = currentCol + 1;
+            this.combinedCells.add(combinedCellX + combinedCellY);
           }
         }
       }
@@ -118,6 +126,7 @@ export default class X2048 extends LightningElement {
 
     if (this.GRID_WAS_UPDATED) {
       this.generateNewCell(2);
+      this.combinedCells.clear();
     }
   }
 
@@ -151,6 +160,11 @@ export default class X2048 extends LightningElement {
             const newValue = adjacentCell.value + currentCell.value;
             this.updateCell(currentRow - 1, j, newValue, this.calculateColor(newValue));
             this.clearCell(currentRow, j);
+
+            // update combined cells set
+            const combinedCellX = currentRow - 1;
+            const combinedCellY = j;
+            this.combinedCells.add(combinedCellX + combinedCellY);
           }
         }
       }
@@ -158,6 +172,7 @@ export default class X2048 extends LightningElement {
 
     if (this.GRID_WAS_UPDATED) {
       this.generateNewCell(2);
+      this.combinedCells.clear();
     }
   }
 
@@ -191,6 +206,11 @@ export default class X2048 extends LightningElement {
             const newValue = adjacentCell.value + currentCell.value;
             this.updateCell(currentRow + 1, j, newValue, this.calculateColor(newValue));
             this.clearCell(currentRow, j);
+
+            // update combined cells set
+            const combinedCellX = currentRow + 1;
+            const combinedCellY = j;
+            this.combinedCells.add(combinedCellX + combinedCellY);
           }
         }
       }
@@ -198,6 +218,7 @@ export default class X2048 extends LightningElement {
 
     if (this.GRID_WAS_UPDATED) {
       this.generateNewCell(2);
+      this.combinedCells.clear();
     }
   }
 
@@ -209,7 +230,8 @@ export default class X2048 extends LightningElement {
     let newCellRow = Math.floor(Math.random() * 4);
     let newCellCol = Math.floor(Math.random() * 4);
 
-    while (this.populatedCells.has(newCellRow + ',' + newCellCol)) {
+    // make sure we're getting a cell without a value
+    while (this.getCell(newCellRow, newCellCol).value) {
       newCellRow = Math.floor(Math.random() * 4);
       newCellCol = Math.floor(Math.random() * 4);
     }

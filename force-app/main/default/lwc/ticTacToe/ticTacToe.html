@@ -1,0 +1,28 @@
+<template>
+  <lightning-card title="Tic Tac Toe">
+    <table>
+      <tbody>
+        <!-- Row One -->
+        <tr>
+          <td class="cell" id="cell0" onclick={onCellClick}>{board.cell0}</td>
+          <td class="cell" id="cell1" onclick={onCellClick}>{board.cell1}</td>
+          <td class="cell" id="cell2" onclick={onCellClick}>{board.cell2}</td>
+        </tr>
+
+        <!-- Row Two -->
+        <tr>
+          <td class="cell" id="cell3" onclick={onCellClick}>{board.cell3}</td>
+          <td class="cell" id="cell4" onclick={onCellClick}>{board.cell4}</td>
+          <td class="cell" id="cell5" onclick={onCellClick}>{board.cell5}</td>
+        </tr>
+
+        <!-- Row Three -->
+        <tr>
+          <td class="cell" id="cell6" onclick={onCellClick}>{board.cell6}</td>
+          <td class="cell" id="cell7" onclick={onCellClick}>{board.cell7}</td>
+          <td class="cell" id="cell8" onclick={onCellClick}>{board.cell8}</td>
+        </tr>
+      </tbody>
+    </table>
+  </lightning-card>
+</template>
