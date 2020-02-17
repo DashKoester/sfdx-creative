@@ -27,8 +27,6 @@ public with sharing class TweetController {
 
 		HTTPResponse res = http.send(req);
 
-		System.debug(res);
-		System.debug(res.getBody());
 		//Parse JSON for Bearer Token
 		JSONParser parser = JSON.createParser(res.getBody());
 		
@@ -45,11 +43,6 @@ public with sharing class TweetController {
 		insert oAuth;
 	}
 
-
-	public static List<Tweet__c> getUserTimeline(String username) {
-		return getUserTimeline(username, 500);
-	}
-
 	private static String getOAuthToken() {
 		List<TwitterOAuthToken__c> tokens = [SELECT Value__c FROM TwitterOAuthToken__c LIMIT 1];
 
@@ -59,11 +52,15 @@ public with sharing class TweetController {
 		}
 
 		return tokens[0].Value__c;
+	}	
+
+	public static List<Tweet__c> getUserTimeline(String username) {
+		return getUserTimeline(username, 500);
 	}
-	
 
 	public static List<Tweet__c> getUserTimeline(String username, Integer count) {
-		
+		List<Tweet__c> tweets = new List<Tweet__c>();
+        
 		// build URL
 		String calloutURL = twitterBaseURL + 'statuses/user_timeline.json';
 
@@ -72,6 +69,9 @@ public with sharing class TweetController {
 
 		// limit number of tweets returned
 		calloutURL += '&count=' + count;
+
+		// add necessary params
+		addAdditionalParameters(calloutURL);
 		
 		// construct HTTP Request
 		HTTPRequest req = new HTTPRequest();
@@ -80,23 +80,86 @@ public with sharing class TweetController {
 		
 		// generate authorization header with AuthToken
 		String authToken = getOAuthToken();
-		
 		String authHeader = 'Bearer ' + authToken;
 		req.setHeader('Authorization', authHeader);
 		
+		// send http request
 		HTTP http = new HTTP();
 		HTTPResponse res = http.send(req);
 
 		if (res.getStatusCode() == 200) {
 			String apiResponse = res.getBody();
-			System.debug(apiResponse);
+			List<Object> responseTweets = (List<Object>) JSON.deserializeUntyped(apiResponse);
+			
+			for (Object tweet : responseTweets) {
 
-			List<Object> responseList = (List<Object>) JSON.deserializeUntyped(apiResponse);
-			for (Object tweet : responseList) {
-				System.debug(tweet);
+				// parse result JSON
+				Map<String, Object> jsonMap = (Map<String, Object>) tweet;
+				Map<String, Object> author = (Map<String, Object>) jsonMap.get('user');
+				
+				// create new Tweet record
+				Tweet__c t = new Tweet__c();
+				t.Body__c = String.valueOf(jsonMap.get('full_text'));
+				t.Author_Display_Name__c = String.valueOf(author.get('name'));
+				t.Author_Username__c = String.valueOf(author.get('screen_name'));
+				
+				// parse timestamp
+				String createdAt = String.valueOf(jsonMap.get('created_at'));
+				List<String> dateComponents = createdAt.split(' ');
+				String gmtString = dateComponents[5] + '-' + parseMonth(dateComponents[1]) + '-' + dateComponents[2] + ' ' + dateComponents[3];
+				t.Timestamp__c = DateTime.valueOfGmt(gmtString);
+				
+				tweets.add(t);
 			}
 		}
 
-		return new List<Tweet__c>();
+		insert tweets;
+		return tweets;
+	}
+
+	private static void addAdditionalParameters(String calloutURL) {
+		calloutURL += '&include_rts=false&tweet_mode=extended';
+	}
+    
+	private static string parseMonth(String abbreviation) {
+		switch on abbreviation.toLowerCase() {
+				when 'jan' {
+					return '01';
+				}
+				when 'feb' {
+					return '02';
+				}
+				when 'mar' {
+					return '03';
+				}
+				when 'apr' {
+					return '04';
+				}
+				when 'may' {
+					return '05';
+				}
+				when 'jun' {
+					return '06';
+				}
+				when 'jul' {
+					return '07';
+				}
+				when 'aug' {
+					return '08';
+				}
+				when 'sep' {
+					return '09';
+				}
+				when 'oct' {
+					return '10';
+				}
+				when 'nov' {
+					return '11';
+				}
+				when 'dec' {
+					return '12';
+				}
+		}
+		return 'INVALID';
 	}
 }
