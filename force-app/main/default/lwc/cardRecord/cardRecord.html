@@ -1,0 +1,59 @@
+<template>
+  <!-- Card referencing Object Labels -->
+  <div class="inner-card">
+    <lightning-card
+      title={recordInfo.tweetNumber}
+      icon-name="standard:partner_fund_request"
+      class="slds-card_boundary"
+    >
+      <div class="slds-p-horizontal_large">
+        <ul>
+          <li>
+            <b>{fieldDescribes.data.body.label}: </b>
+            {recordInfo.body}
+          </li>
+          <li>
+            <b>{fieldDescribes.data.authorUsername.label}: </b>
+            {recordInfo.authorUsername}
+          </li>
+          <li>
+            <b>{fieldDescribes.data.timestamp.label}: </b>
+            {recordInfo.timestamp}
+          </li>
+          <li>
+            <b>{fieldDescribes.data.positiveProbability.label}: </b>
+            {recordInfo.positiveProbability}
+          </li>
+          <li>
+            <b>{fieldDescribes.data.neutralProbability.label}: </b>
+            {recordInfo.neutralProbability}
+          </li>
+          <li>
+            <b>{fieldDescribes.data.negativeProbability.label}: </b>
+            {recordInfo.negativeProbability}
+          </li>
+        </ul>
+      </div>
+    </lightning-card>
+  </div>
+
+  <!-- Backup card in case that breaks everything -->
+  <!-- <div class="inner-card">
+    <lightning-card
+      title={recordInfo.saleId}
+      icon-name="standard:partner_fund_request"
+    >
+      <div class="slds-p-horizontal_large">
+        <h1 class="slds-text-heading_small"><b>{recordInfo.sneakerName}</b></h1>
+        <br />
+        <ul>
+          <li>Sale Price:<b> ${recordInfo.salePrice}</b></li>
+          <li>Profit:<b> ${recordInfo.profit}</b></li>
+          <li>Number of Days Listed:<b> {recordInfo.numDaysListed}</b></li>
+          <li>Release Date:<b> {recordInfo.releaseDate}</b></li>
+          <li>Buyer Region:<b> {recordInfo.buyerRegion}</b></li>
+        </ul>
+      </div>
+    </lightning-card>
+  </div> -->
+</template>

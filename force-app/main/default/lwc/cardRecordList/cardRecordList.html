@@ -1,0 +1,76 @@
+<template>
+  <!-- Loading Spinner -->
+  <div id="waiting" if:false={componentIsLoaded}>
+    <div class="loadingSpinner">
+      <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+    </div>
+  </div>
+
+  <!-- Card List -->
+  <div id="cardList" class="slds-card-wrapper" if:true={componentIsLoaded}>
+    <template if:true={records.data}>
+      <lightning-card title={title} icon-name={iconName}>
+        <!-- Action Buttons -->
+        <lightning-button-group slot="actions">
+          <!-- Notice the use of slots to define where the child node falls in the template -->
+          <lightning-button-icon-stateful
+            icon-name="utility:list"
+            selected={listViewIsSelected}
+            onclick={handleDisplayModeChange}
+            alternative-text="List View"
+          ></lightning-button-icon-stateful>
+          <lightning-button-icon-stateful
+            icon-name="utility:tile_card_list"
+            selected={gridViewIsSelected}
+            onclick={handleDisplayModeChange}
+            alternative-text="Grid View"
+          ></lightning-button-icon-stateful>
+        </lightning-button-group>
+
+        <!-- List View -->
+        <template if:true={listViewIsSelected}>
+          <template for:each={records.data} for:item="record">
+            <!-- This is the new aura:iteration. for:each = items, for:item = var -->
+            <c-card-record
+              key={record.Id}
+              record-info={record}
+              object-describes={objectDescribes}
+              field-describes={fieldDescribes}
+            ></c-card-record>
+            <!-- Every child of an iteration must have a valid key attribute -->
+          </template>
+        </template>
+
+        <!-- Grid View -->
+        <template if:true={gridViewIsSelected}>
+          <div class="slds-grid slds-gutters slds-wrap">
+            <template for:each={salesData.data} for:item="sale">
+              <div class="slds-col" key={sale.saleId}>
+                <!-- Notice that only the first child of an iteration contains the key attribute -->
+                <c-card-record
+                  sale-info={sale}
+                  object-describes={objectDescribes}
+                  field-describes={fieldDescribes}
+                ></c-card-record>
+              </div>
+            </template>
+          </div>
+        </template>
+
+        <!-- Footer -->
+        <lightning-button
+          slot="footer"
+          onclick={loadMoreRecords}
+          label="View More"
+          title="View More"
+        >
+        </lightning-button>
+      </lightning-card>
+    </template>
+
+    <!-- Error handling -->
+    <template if:true={records.error}>
+      Handle Errors Here
+    </template>
+  </div>
+</template>
