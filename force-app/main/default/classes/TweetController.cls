@@ -6,10 +6,18 @@ public with sharing class TweetController {
 	private static final String API_KEY_ENCODED = EncodingUtil.urlEncode(API_KEY, 'UTF-8');
 	private static final String SECRET_KEY_ENCODED = EncodingUtil.urlEncode(SECRET_KEY, 'UTF-8');
 
+	// Twitter
 	private static final String twitterBaseURL = 'https://api.twitter.com/1.1/';
 	private static final String twitterOAuthURL = 'https://api.twitter.com/oauth2/token';
+	private static final String additionalURLParameters = '&include_rts=false&tweet_mode=extended';
 
-	public static void generateAuthToken() {
+	private static final String twitterNamedCredentialCalloutURL = 'callout:Twitter/';
+
+	// Einstein
+	private static final String einsteinBaseURL = 'https://api.einstein.ai/v2/language/sentiment';
+
+
+	public static void generateTwitterOAuthToken() {
 
 		//Build Request
 		HttpRequest req = new HttpRequest();
@@ -43,35 +51,39 @@ public with sharing class TweetController {
 		insert oAuth;
 	}
 
-	private static String getOAuthToken() {
+	private static String getTwitterOAuthToken() {
 		List<TwitterOAuthToken__c> tokens = [SELECT Value__c FROM TwitterOAuthToken__c LIMIT 1];
 
 		if (tokens.size() == 0) {
-			generateAuthToken();
+			generateTwitterOAuthToken();
 			tokens = [SELECT Value__c FROM TwitterOAuthToken__c LIMIT 1];
 		}
 
 		return tokens[0].Value__c;
-	}	
+	}
+
+	private static String getEinsteinOAuthToken() {
+		return [SELECT Value__c FROM EinsteinOAuthToken__c LIMIT 1][0].Value__c;
+	}
 
 	public static List<Tweet__c> getUserTimeline(String username) {
 		return getUserTimeline(username, 500);
 	}
-
+	
 	public static List<Tweet__c> getUserTimeline(String username, Integer count) {
 		List<Tweet__c> tweets = new List<Tweet__c>();
-        
+		
 		// build URL
-		String calloutURL = twitterBaseURL + 'statuses/user_timeline.json';
-
+		String calloutURL = twitterNamedCredentialCalloutURL + 'statuses/user_timeline.json';
+		
 		// specify user
 		calloutURL += '?screen_name=' + username;
-
+		
 		// limit number of tweets returned
 		calloutURL += '&count=' + count;
-
+		
 		// add necessary params
-		addAdditionalParameters(calloutURL);
+		calloutURL += additionalURLParameters;
 		
 		// construct HTTP Request
 		HTTPRequest req = new HTTPRequest();
@@ -79,20 +91,22 @@ public with sharing class TweetController {
 		req.setEndpoint(calloutURL);
 		
 		// generate authorization header with AuthToken
-		String authToken = getOAuthToken();
+		String authToken = getTwitterOAuthToken();
 		String authHeader = 'Bearer ' + authToken;
 		req.setHeader('Authorization', authHeader);
 		
 		// send http request
 		HTTP http = new HTTP();
 		HTTPResponse res = http.send(req);
-
+		System.debug(res);
+		System.debug(res.getBody());
+		
 		if (res.getStatusCode() == 200) {
 			String apiResponse = res.getBody();
 			List<Object> responseTweets = (List<Object>) JSON.deserializeUntyped(apiResponse);
 			
 			for (Object tweet : responseTweets) {
-
+				
 				// parse result JSON
 				Map<String, Object> jsonMap = (Map<String, Object>) tweet;
 				Map<String, Object> author = (Map<String, Object>) jsonMap.get('user');
@@ -112,15 +126,42 @@ public with sharing class TweetController {
 				tweets.add(t);
 			}
 		}
-
-		insert tweets;
+		
 		return tweets;
 	}
+	
+	public static void analyzeTweet(Tweet__c tweet) {
+		String document = '';
+		if (Tweet__c.Body__c.getDescribe().isAccessible()) {
+			document = tweet.Body__c;
+		}
+		
+		// construct HTTP Request
+		HTTPRequest req = new HTTPRequest();
+		req.setMethod('POST');
+		req.setEndpoint(einsteinBaseURL);
 
-	private static void addAdditionalParameters(String calloutURL) {
-		calloutURL += '&include_rts=false&tweet_mode=extended';
+		// generate request body
+		String requestBody = '{\"modelId\":\"CommunitySentiment\", \"document\":\"' + document + '\"}';
+		req.setBody(requestBody);
+
+		// generate authorization header with AuthToken
+		String authToken = getEinsteinOAuthToken();
+		String authHeader = 'Bearer ' + authToken;
+		req.setHeader('Authorization', authHeader);
+		req.setHeader('Content-Type', 'application/json');
+		
+		// send http request
+		HTTP http = new HTTP();
+		HTTPResponse res = http.send(req);
+		System.debug(res);
+
+		if (res.getStatusCode() == 200) {
+			String apiResponse = res.getBody();
+			System.debug(apiResponse);
+		}
 	}
-    
+
 	private static string parseMonth(String abbreviation) {
 		switch on abbreviation.toLowerCase() {
 				when 'jan' {
